@@ -8,7 +8,7 @@ def main():
 
     hybrid_search = HybridSearch(books, bm25_corpus)
 
-    query = "AI takes over humanity"
+    query = "Thorvald Spear"
     print(f"\nPerforming hybrid search for: \"{query}\"...\n")
 
     results = hybrid_search.search(query, k=5)
@@ -16,6 +16,7 @@ def main():
     print("Top Results:")
     for result in results:
         print(f"{result['title']} - {result['author']} - {result['about']}")
+        print('------------------------------------------')
 
 if __name__ == "__main__":
     main()

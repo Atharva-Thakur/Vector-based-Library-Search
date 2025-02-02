@@ -43,10 +43,10 @@ class HybridSearch:
         print('Combined results (before re-ranking):', combined_results)
         print('--------------------------------------------------------------')
         
-        candidate_pairs = [(query, book['title']) for book in combined_results]
+        candidate_pairs = [(query, f"{book['title']} {book['author']} {' '.join(book['genre'])} {book['about']}".lower()) for book in combined_results]
         
         scores = self.re_ranker.predict(candidate_pairs)
-        
+        print('rerank scores',scores)
         reranked_results = [
             book for _, book in sorted(zip(scores, combined_results), key=lambda pair: pair[0], reverse=True)
         ][:k]
