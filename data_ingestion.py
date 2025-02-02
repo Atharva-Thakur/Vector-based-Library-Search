@@ -9,7 +9,9 @@ import nltk
 from config import DATA_PATH, FAISS_INDEX_PATH, EMBEDDING_MODEL, EMBEDDING_PATH
 
 nltk.download("punkt")
-
+nltk.download('punkt_tab')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 class DataIngestion:
     def __init__(self, data_path=DATA_PATH, embedding_path=EMBEDDING_PATH, faiss_path=FAISS_INDEX_PATH):
