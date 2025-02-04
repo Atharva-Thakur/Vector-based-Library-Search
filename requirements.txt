@@ -4,3 +4,6 @@ nltk
 faiss-cpu
 sentence-transformers
 rank_bm25
+fastapi
+uvicorn
+pydantic
