@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://studious-invention-x776g55wpvjh9vpx-5173.app.github.dev"],  # Or use ["*"] to allow all origins (not recommended in production)
+    allow_origins=["https://opulent-enigma-jvv6pjj54593j7jx-5173.app.github.dev"],  # Or use ["*"] to allow all origins (not recommended in production)
     allow_credentials=True,
     allow_methods=["*"],  # Allows all HTTP methods
     allow_headers=["*"],  # Allows all headers
@@ -34,7 +34,7 @@ async def search_books(query_request: QueryRequest):
     start_time = time.time()  # Start the timer
 
     query = query_request.query
-    results = hybrid_search.search(query, k=5)
+    results = hybrid_search.search(query, k=10)
 
     end_time = time.time()  # End the timer
     execution_time = end_time - start_time  # Calculate the time taken
