@@ -34,7 +34,7 @@ async def search_books(query_request: QueryRequest):
     start_time = time.time()  # Start the timer
 
     query = query_request.query
-    results = hybrid_search.search(query, k=5)
+    results = hybrid_search.search(query, k=10)
 
     end_time = time.time()  # End the timer
     execution_time = end_time - start_time  # Calculate the time taken
