@@ -1,0 +1,49 @@
+Example 1
+Context:
+Marie Curie was a pioneering physicist and chemist, best known for her work on radioactivity. Born in 1867 in Warsaw, Poland, Curie moved to Paris to pursue her studies at the Sorbonne, where she met her husband, Pierre Curie. Together, they discovered the elements polonium and radium. Marie Curie became the first woman to win a Nobel Prize, and she is the only person to have won Nobel Prizes in two different scientific fields—Physics in 1903 (shared with her husband and Henri Becquerel) and Chemistry in 1911 for her work on radium and polonium.
+
+Question:
+For which scientific discovery did Marie Curie receive the Nobel Prize in Chemistry in 1911?
+
+Answer:
+Marie Curie received the Nobel Prize in Chemistry in 1911 for her work on radium and polonium.
+
+Example 2
+Context:
+The Great Wall of China is one of the most iconic landmarks in the world, originally built to protect Chinese states and empires from invasions by nomadic tribes. The wall was constructed over several dynasties, with the most famous sections built during the Ming Dynasty (1368–1644). Stretching over 13,000 miles, the wall is not a single continuous structure but a series of walls and fortifications connected by watchtowers and signal fires. Despite its formidable design, the wall was not always effective in stopping invasions, and it eventually fell to the Manchu invasions in the 17th century.
+
+Question:
+During which Chinese dynasty was the most famous section of the Great Wall of China built?
+
+Answer:
+The most famous section of the Great Wall of China was built during the Ming Dynasty.
+
+Example 3
+Context:
+The theory of plate tectonics, first developed in the 1960s, explains the movement of Earth's lithosphere on the more fluid asthenosphere beneath it. According to the theory, Earth's outer shell is divided into several large and small plates that move over time due to convection currents in the mantle. The interactions between these tectonic plates—such as subduction, seafloor spreading, and continental drift—are responsible for many geological features like mountains, earthquakes, and volcanic eruptions. One of the most significant pieces of evidence supporting plate tectonics was the discovery of the mid-ocean ridges and the patterns of magnetic anomalies on the ocean floor.
+
+Question:
+What is one of the key pieces of evidence that supports the theory of plate tectonics?
+
+Answer:
+One key piece of evidence supporting the theory of plate tectonics is the discovery of the mid-ocean ridges and the patterns of magnetic anomalies on the ocean floor.
+
+Example 4
+Context:
+The Renaissance, a period of cultural rebirth from the 14th to the 17th century, was marked by a renewed interest in art, science, and the classical learning of ancient Greece and Rome. This period saw the works of artists like Leonardo da Vinci, Michelangelo, and Raphael, as well as the scientific breakthroughs of figures such as Copernicus, Galileo, and Johannes Kepler. The printing press, invented by Johannes Gutenberg in the mid-15th century, played a crucial role in spreading knowledge and ideas, contributing to the intellectual and cultural flourishing of the time. The Renaissance had a profound impact on Western culture and laid the foundations for the modern era.
+
+Question:
+Which invention played a crucial role in spreading knowledge and ideas during the Renaissance?
+
+Answer:
+The printing press, invented by Johannes Gutenberg, played a crucial role in spreading knowledge and ideas during the Renaissance.
+
+Example 5
+Context:
+Wright brothers, Orville and Wilbur, were two American inventors credited with inventing and building the world's first successful motor-operated airplane. On December 17, 1903, in Kitty Hawk, North Carolina, they made their first powered flight, with the aircraft, known as the Wright Flyer, staying aloft for 12 seconds and covering a distance of 120 feet. Their success came after years of experimentation and was the result of their innovative design and understanding of aerodynamics. The Wright brothers' achievement marked the beginning of the era of powered flight and revolutionized global transportation.
+
+Question:
+What was the distance covered by the Wright Flyer during its first powered flight?
+
+Answer:
+The Wright Flyer covered a distance of 120 feet during its first powered flight.
