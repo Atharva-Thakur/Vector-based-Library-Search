@@ -1,9 +1,16 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 
+program_start_time = time.time()
+
+start_time = time.time()
 # Load tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v0.6")
 model = AutoModelForCausalLM.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v0.6")
+end_time = time.time()
+
+execution_time = end_time - start_time
+print(f"Execution time loading model: {execution_time:.4f} seconds")
 
 # Your input query
 query = '''Context:
@@ -17,7 +24,14 @@ Answer:
 '''
 
 # Tokenize the input query
+
+start_time = time.time()
 inputs = tokenizer(query, return_tensors="pt")
+end_time = time.time()
+
+execution_time = end_time - start_time
+print(f"Execution time tokenizing input: {execution_time:.4f} seconds")
+
 start_time = time.time()
 # Generate a response from the model
 outputs = model.generate(inputs['input_ids'], max_length=2000, num_return_sequences=1)
@@ -29,7 +43,12 @@ end_time = time.time()
 execution_time = end_time - start_time
 # Print the model's response
 print(response)
-print(f"Execution time : {execution_time:.4f} seconds")
+print(f"Execution time generating reponse : {execution_time:.4f} seconds")
+
+program_end_time = time.time()
+program_execution_time = program_end_time-program_start_time
+print(f"Execution time the entire program : {program_execution_time:.4f} seconds")
+
 #Takes around 10 seconds to generate answer running on CPU.
 #Generated content is mostly accurate as long as context contains the answers
 #Need to check performance with a GPU
