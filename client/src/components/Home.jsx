@@ -14,7 +14,7 @@ const Home = () => {
         e.preventDefault();
         if (query.length === 0) return;
         setIsLoading(true)
-        const { data } = await axios.post('https://opulent-enigma-jvv6pjj54593j7jx-8000.app.github.dev/search', { query });
+        const { data } = await axios.post('https://sturdy-space-lamp-p44v5jjrwxgcgr7-8000.app.github.dev/search', { query });
         console.log(data);
         setResults(data?.results)
         setIsLoading(false)
