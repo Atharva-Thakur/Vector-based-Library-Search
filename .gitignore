@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+data/corpus/bm25_corpus.pkl
+data/index/faiss_books.index
