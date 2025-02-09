@@ -22,12 +22,22 @@ class QueryRequest(BaseModel):
 
 # Initialize DataIngestion and HybridSearch outside of the endpoint to avoid reinitializing on each request
 ingestion = DataIngestion()
-bm25_corpus, books, _ = ingestion.run()
-hybrid_search = HybridSearch(books, bm25_corpus)
+bm25_corpus, data, _ = ingestion.run()
+hybrid_search = HybridSearch(data, bm25_corpus)
 
-@app.get("/water")
-async def getWater():
-    return "water"
+@app.get("/genres")
+def get_unique_genres():
+    genres = set()
+    
+    for book in data:
+        genre_value = book.get("Category", [])
+        
+        if isinstance(genre_value, str):  # If "genre" is a single string
+            genres.add(genre_value)
+        elif isinstance(genre_value, list):  # If "genre" is a list
+            genres.update(genre_value)
+    print(len(genres))
+    return list(genres)
 
 @app.post("/search")
 async def search_books(query_request: QueryRequest):

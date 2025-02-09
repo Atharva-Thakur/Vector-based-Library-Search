@@ -4,19 +4,20 @@ from hybrid_search import HybridSearch
 def main():
     print("Loading data and indexing...")
     ingestion = DataIngestion()
-    bm25_corpus, books, _ = ingestion.run()
+    bm25_corpus, data, _ = ingestion.run()
 
-    hybrid_search = HybridSearch(books, bm25_corpus)
+    hybrid_search = HybridSearch(data, bm25_corpus)
 
-    query = "Thorvald Spear"
+    query = "AI takes over humanity"
     print(f"\nPerforming hybrid search for: \"{query}\"...\n")
 
     results = hybrid_search.search(query, k=5)
 
     print("Top Results:")
-    for result in results:
-        print(f"{result['title']} - {result['author']} - {result['about']}")
-        print('------------------------------------------')
+    # for result in results:
+    #     print(f"{result['Title']} - {result['Author']} - {result['about']}")
+    #     print('------------------------------------------')
+    print(results)
 
 if __name__ == "__main__":
     main()

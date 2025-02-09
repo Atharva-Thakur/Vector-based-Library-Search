@@ -6,7 +6,8 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
 import nltk
-from config import DATA_PATH, FAISS_INDEX_PATH, EMBEDDING_MODEL, EMBEDDING_PATH
+import pickle
+from config import BM25_CORPUS_PATH, DATA_PATH, FAISS_INDEX_PATH, EMBEDDING_MODEL, EMBEDDING_PATH
 
 nltk.download("punkt")
 nltk.download('punkt_tab')
@@ -18,59 +19,66 @@ class DataIngestion:
         self.data_path = data_path
         self.embedding_path = embedding_path
         self.faiss_path = faiss_path
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.fields = []
+        self.model = SentenceTransformer(EMBEDDING_MODEL)
 
     def load_data(self):
-        """Load books from JSON or CSV."""
-        if self.data_path.endswith(".json"):
-            with open(self.data_path, "r", encoding="utf-8") as file:
-                books = json.load(file)
-        elif self.data_path.endswith(".csv"):
-            books = pd.read_csv(self.data_path).to_dict(orient="records")
+        if DATA_PATH.endswith(".json"):
+            with open(DATA_PATH, "r", encoding="utf-8") as file:
+                data = json.load(file)
+        elif DATA_PATH.endswith(".csv"):
+            data = pd.read_csv(DATA_PATH).to_dict(orient="records")
         else:
             raise ValueError("Unsupported file format!")
-        print(f"Loaded {len(books)} books.")
-        return books
+        
+        self.fields = list(data[0].keys()) if data else []
+        print(f"Loaded {len(data)} records.")
+        return data
 
-    def create_bm25_corpus(self, books):
-        """Create tokenized corpus for BM25 using title, author, genre, and about."""
-        print('Creating BM25 corpus...')
-        corpus = []
-        for book in books:
-            text = f"{book['title']} {book['author']} {' '.join(book['genre'])} {book['about']}".lower()
-            corpus.append(nltk.word_tokenize(text))  # Tokenize the combined text
+    def create_corpus_text(self, item, fields):
+        return " ".join(str(item[field]) for field in fields if field in item).lower()
+
+    def create_bm25_corpus(self, data):
+        """ Create and store BM25 corpus if not already saved. """
+        if os.path.exists(BM25_CORPUS_PATH):
+            with open(BM25_CORPUS_PATH, "rb") as f:
+                return pickle.load(f)
+        
+        corpus = [nltk.word_tokenize(self.create_corpus_text(item, self.fields)) for item in data]
+        
+        # Save corpus
+        with open(BM25_CORPUS_PATH, "wb") as f:
+            pickle.dump(corpus, f)
         
         return corpus
 
-    def create_faiss_index(self, books):
-        """Create or load FAISS index."""
-        if os.path.exists(self.embedding_path):
-            print("Loading saved embeddings...")
-            embeddings = np.load(self.embedding_path)
-            index = faiss.IndexFlatL2(embeddings.shape[1])
+    def create_faiss_index(self, data):
+        if os.path.exists(EMBEDDING_PATH) and os.path.exists(FAISS_INDEX_PATH):
+            embeddings = np.load(EMBEDDING_PATH)
+            index = faiss.read_index(FAISS_INDEX_PATH)
+        elif os.path.exists(EMBEDDING_PATH):
+            embeddings = np.load(EMBEDDING_PATH)
+            d = embeddings.shape[1]
+            nlist = 10
+            quantizer = faiss.IndexFlatL2(d)
+            index = faiss.IndexIVFFlat(quantizer, d, nlist)
+            index.train(embeddings)
             index.add(embeddings)
-            faiss.write_index(index, self.faiss_path)
+            faiss.write_index(index, FAISS_INDEX_PATH)
         else:
-            print("Generating new embeddings and FAISS index...")
-            texts = [[f"{book['title']} {book['author']} {' '.join(book['genre'])} {book['about']}".lower()] for book in books]
-            embeddings = np.array(self.model.encode(texts), dtype=np.float32)
-            
-            # Save embeddings
-            np.save(self.embedding_path, embeddings)
-
-            # Create FAISS index
-            index = faiss.IndexFlatL2(embeddings.shape[1])
+            texts = [self.create_corpus_text(item, self.fields) for item in data]
+            embeddings = np.array(self.model.encode(texts, normalize_embeddings=True), dtype=np.float32)
+            np.save(EMBEDDING_PATH, embeddings)
+            index = faiss.IndexFlatIP(embeddings.shape[1])
             index.add(embeddings)
-            faiss.write_index(index, self.faiss_path)
-
+            faiss.write_index(index, FAISS_INDEX_PATH)
         return index, embeddings
 
     def run(self):
-        """Load data, process BM25 & FAISS, and return results."""
-        books = self.load_data()
-        bm25_corpus = self.create_bm25_corpus(books)
-        faiss_index, embeddings = self.create_faiss_index(books)
-        return bm25_corpus, books, faiss_index
+        data = self.load_data()
+        bm25_corpus = self.create_bm25_corpus(data)
+        faiss_index, embeddings = self.create_faiss_index(data)
+        return bm25_corpus, data, faiss_index
 
 
 if __name__ == "__main__":
