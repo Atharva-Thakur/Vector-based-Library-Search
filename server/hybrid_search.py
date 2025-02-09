@@ -29,7 +29,7 @@ class HybridSearch:
         rank_scores, item_mapping = {}, {}
         for result_list in [faiss_results, bm25_results]:
             for rank, item in enumerate(result_list, start=1):
-                title = item.get('Title', str(item))
+                title = item.get('title', str(item))
                 rank_scores[title] = rank_scores.get(title, 0) + 1 / (rank + k_const)
                 item_mapping[title] = item
         top_titles = sorted(rank_scores, key=rank_scores.get, reverse=True)[:k]
