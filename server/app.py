@@ -19,6 +19,7 @@ app.add_middleware(
 # Pydantic model to receive the query input
 class QueryRequest(BaseModel):
     query: str
+    filter:dict
 
 # Initialize DataIngestion and HybridSearch outside of the endpoint to avoid reinitializing on each request
 ingestion = DataIngestion()
@@ -30,7 +31,7 @@ def get_unique_genres():
     genres = set()
     
     for book in data:
-        genre_value = book.get("Category", [])
+        genre_value = book.get("genre", [])
         
         if isinstance(genre_value, str):  # If "genre" is a single string
             genres.add(genre_value)
@@ -44,7 +45,8 @@ async def search_books(query_request: QueryRequest):
     start_time = time.time()  # Start the timer
 
     query = query_request.query
-    results = hybrid_search.search(query, k=5)
+    filter = query_request.filter
+    results = hybrid_search.search(query, k=5, filter=filter)
 
     end_time = time.time()  # End the timer
     execution_time = end_time - start_time  # Calculate the time taken

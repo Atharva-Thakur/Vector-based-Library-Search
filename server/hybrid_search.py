@@ -13,17 +13,23 @@ class HybridSearch:
         return " ".join(str(item[field]) for field in fields if field in item).lower()
 
 
-    def search(self, query, k=5):
-        faiss_results = self.vector_search.search(query, k=10)
-        bm25_results = self.bm25_search.search(query, k=10)
+    def search(self, query, k=5, filter=None):
+        faiss_results = self.vector_search.search(query, k=100)
+        bm25_results = self.bm25_search.search(query, k=100)
         
-        combined_results = self.reciprocal_rank_fusion(faiss_results, bm25_results, k=10)
-        
-        if not combined_results:
+        combined_results = self.reciprocal_rank_fusion(faiss_results, bm25_results, k=100)
+        filtered_results =[]
+        if filter and 'role' in filter:
+            filtered_results = []
+            for result in combined_results:
+                if result.get('role') == filter['role']:
+                    filtered_results.append(result)
+                
+        if not filtered_results:
             print("No results found.")
             return []
         
-        return self.re_rank(combined_results, query, k)
+        return self.re_rank(filtered_results, query, k)
 
     def reciprocal_rank_fusion(self, faiss_results, bm25_results, k=5, k_const=60):
         rank_scores, item_mapping = {}, {}
