@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "arbortextgen"
+version = "0.1.0"
+description = ""
+authors = ["Abraham Ahmed <abraham21aug@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.1.5"
+djangorestframework = "3.14.0"
+django-cors-headers = "^4.6.0"
+faiss-cpu = "^1.10.0"
+sentence-transformers = "^3.4.1"
+langchain-community = "^0.3.16"
+langchain-core = "^0.3.33"
+langchain = "^0.3.17"
+langchain-huggingface = "^0.1.2"
+llama-cpp-python = "0.2.90"
+pymupdf = "^1.25.2"
+pdfplumber = "^0.11.5"
+langchain-experimental = "^0.3.4"
+langchain-openai = "^0.3.3"
+nltk = "^3.9.1"
+pandas = "^2.2.3"
+rank-bm25 = "^0.2.2"
+torch = "2.6.0"
+accelerate = ">=0.26.0"
+transformers = ">=4.37.0"
+djangorestframework-simplejwt = "^5.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+

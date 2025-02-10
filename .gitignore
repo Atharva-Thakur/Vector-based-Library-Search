@@ -1,4 +1,15 @@
 # Byte-compiled / optimized / DLL files
+# Ignore everything in LLM/LLAMA2/
+arbortextgen/model/*
+arbortextgen/sentence-transformer/*
+arbortextgen/media/vectorstores/*
+# Keep the LLM/LLAMA2/ directory
+!arbortextgen/model/
+!arbortextgen/sentence-transformer/
+!arbortextgen/media/vectorstores/
+
+
+
 __pycache__/
 *.py[cod]
 *$py.class
