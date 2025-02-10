@@ -11,12 +11,9 @@ def main():
     query = "AI takes over humanity"
     print(f"\nPerforming hybrid search for: \"{query}\"...\n")
 
-    results = hybrid_search.search(query, k=5)
+    results = hybrid_search.search(query, k=5, filter={'role': 'User'})
 
     print("Top Results:")
-    # for result in results:
-    #     print(f"{result['Title']} - {result['Author']} - {result['about']}")
-    #     print('------------------------------------------')
     print(results)
 
 if __name__ == "__main__":

@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import faiss
 from sentence_transformers import SentenceTransformer
-from rank_bm25 import BM25Okapi
 import nltk
 import pickle
 from config import BM25_CORPUS_PATH, DATA_PATH, FAISS_INDEX_PATH, EMBEDDING_MODEL, EMBEDDING_PATH
@@ -51,20 +50,47 @@ class DataIngestion:
             pickle.dump(corpus, f)
         
         return corpus
+    
+    def load_faiss_index(self, role):
+        """Load the Faiss index if it exists for a specific role."""
+        role_index_path = os.path.join("data/index/", f"{role}_index.index")
+        if os.path.exists(role_index_path):
+            print(f"Loading existing Faiss index for role: {role}...")
+            return faiss.read_index(role_index_path)
+        else:
+            print(f"Faiss index not found for role: {role}, will create new index.")
+            return None
 
     def create_faiss_index(self, data):
-        if os.path.exists(EMBEDDING_PATH) and os.path.exists(FAISS_INDEX_PATH):
+        if os.path.exists(EMBEDDING_PATH):
             embeddings = np.load(EMBEDDING_PATH)
-            index = faiss.read_index(FAISS_INDEX_PATH)
-        elif os.path.exists(EMBEDDING_PATH):
-            embeddings = np.load(EMBEDDING_PATH)
-            d = embeddings.shape[1]
-            nlist = 10
-            quantizer = faiss.IndexFlatL2(d)
-            index = faiss.IndexIVFFlat(quantizer, d, nlist)
-            index.train(embeddings)
-            index.add(embeddings)
-            faiss.write_index(index, FAISS_INDEX_PATH)
+
+            roles = ['Admin', 'User', 'Moderator', 'Guest']
+            role_data = {role: [] for role in roles}
+            
+            # Split embeddings by role using DataFrame
+            for idx, item in enumerate(data):
+                role_data[item['role']].append(idx)
+
+            role_indexes = {}
+            for role in roles:
+                role_indices = role_data[role]
+                if role_indices:
+                    role_embeddings = embeddings[role_indices]  # Use pre-existing embeddings for the role
+                    dim = role_embeddings.shape[1]
+                    
+                    # Check if index exists for the role
+                    index = self.load_faiss_index(role)
+                    
+                    if index is None:  # If index does not exist, create it
+                        index = faiss.IndexFlatL2(dim)
+                        index.add(role_embeddings)
+                        role_indexes[role] = index
+                        # Save the Faiss index
+                        role_index_path = os.path.join(self.faiss_path, f"{role}_index.index")
+                        faiss.write_index(index, role_index_path)
+                    else:
+                        role_indexes[role] = index
         else:
             texts = [self.create_corpus_text(item, self.fields) for item in data]
             embeddings = np.array(self.model.encode(texts, normalize_embeddings=True), dtype=np.float32)
@@ -72,13 +98,13 @@ class DataIngestion:
             index = faiss.IndexFlatIP(embeddings.shape[1])
             index.add(embeddings)
             faiss.write_index(index, FAISS_INDEX_PATH)
-        return index, embeddings
+        return role_indexes, embeddings
 
     def run(self):
         data = self.load_data()
         bm25_corpus = self.create_bm25_corpus(data)
-        faiss_index, embeddings = self.create_faiss_index(data)
-        return bm25_corpus, data, faiss_index
+        role_indexes, embeddings = self.create_faiss_index(data)
+        return bm25_corpus, data, role_indexes['Admin']
 
 
 if __name__ == "__main__":

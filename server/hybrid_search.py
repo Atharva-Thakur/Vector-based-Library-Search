@@ -14,11 +14,11 @@ class HybridSearch:
 
 
     def search(self, query, k=5, filter=None):
-        faiss_results = self.vector_search.search(query, k=100)
+        faiss_results = self.vector_search.search(query, k=100, filter=filter)
         bm25_results = self.bm25_search.search(query, k=100)
         
         combined_results = self.reciprocal_rank_fusion(faiss_results, bm25_results, k=100)
-        filtered_results =[]
+        filtered_results = []
         if filter and 'role' in filter:
             filtered_results = []
             for result in combined_results:
