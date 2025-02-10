@@ -172,4 +172,4 @@ cython_debug/
 
 
 data/corpus/bm25_corpus.pkl
-data/index/faiss_books.index
+data/index/

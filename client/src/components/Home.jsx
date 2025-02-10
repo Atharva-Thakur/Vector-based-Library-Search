@@ -14,7 +14,10 @@ const Home = () => {
         e.preventDefault();
         if (query.length === 0) return;
         setIsLoading(true)
-        const { data } = await axios.post('https://sturdy-space-lamp-p44v5jjrwxgcgr7-8000.app.github.dev/search', { query });
+        const { data } = await axios.post('https://fluffy-train-vjp9r6wwj6rcxjpr-8000.app.github.dev/search', {
+            query,
+            filter: { role: 'Admin' }  // Correct the filter format
+        });
         console.log(data);
         setResults(data?.results)
         setIsLoading(false)
